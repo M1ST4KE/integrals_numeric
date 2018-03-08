@@ -1,0 +1,1 @@
+g++ main.cpp proto.h -o integrals
