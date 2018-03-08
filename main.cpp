@@ -47,7 +47,7 @@ ldb trp(ldb a, ldb b, ldb step) {
 //obliczanie całki metodą Monte Carlo
 ldb MC(ldb a, ldb b, ldb step) {
     int ptIn = 0;
-    step = (b - a) / step;                                                                                  //by liczba iteracji była porównywalna do wcześniejszych metod
+    step = (b - a) / step; //by liczba iteracji była porównywalna do wcześniejszych metod
     srand((unsigned)time(nullptr));
     ldb ya = 0;
     ldb yb = ceil(MAX(funVal(a),funVal(b)));
