@@ -8,14 +8,51 @@
 
 int main() {
     ldb a, b, step;
-    std::cout << "podaj a, b i długosc przedzialu" << "\n";
+    bool run = false;
+    int i = 0;
+    std::cout << "podaj  przedział całkowania a, b i ddokladnosc" << "\n";
     std::cin >> a;
     std::cin >> b;
     std::cin >> step;
-    std::cout << "obliczone metoda prostakatow....... " << rct(a, b, step) << "\n";
-    std::cout << "obliczone metoda trapezow.......... " << trp(a, b, step) << "\n";
-    std::cout << "obliczone metoda Monte Carlo....... " << MC(a, b, step) << "\n";
-    return 0;
+
+    do {
+        while (step == 0) {
+            std::cout << "podaj dokladonsc rozna od 0\n";
+            std::cin >> step;
+            i++;
+            if (i > 3){
+                std::cout << "przekroczono maksymalna liczbe wprowadzenia blednych argumentow\n";
+                system("pause");
+                return 1;
+            }
+        }
+        if ((1. /step) < 0.1 || run){
+            run = true;
+            std::cout << "obliczone metoda prostakatow....... " << rct(a, b, (1. / step)) << "\n";
+            std::cout << "obliczone metoda trapezow.......... " << trp(a, b, (1. / step)) << "\n";
+            std::cout << "obliczone metoda Monte Carlo....... " << MC(a, b, (1. / step)) << "\n";
+            system("pause");
+            return 0;
+        }
+        else {
+            std::cout << "czy na pewno chcesz uruchomic program z tak mala dokladonsca?\n(t/n)\n";
+            char runTxt;
+            std::cin >> runTxt;
+            if (runTxt == 't' || runTxt == 'T')
+                run = true;
+            else {
+                std::cout << "podaj nowa dokladnosc";
+                std::cin >> step;
+            }
+        }
+        if (i > 3){
+            std::cout << "przekroczono maksymalna liczbe wprowadzenia blednych argumentow\n";
+            system("pause");
+            return 1;
+        }
+        i++;
+    } while (!run);
+
 }
 
 //oblicznie odległości punktu należącego do funkcji od osi OX

@@ -10,8 +10,6 @@
 #include <ctime>
 
 
-#define MAX(a,b) (a > b)?a:b
-
 typedef long double ldb;
 
 long double funVal(long double);
