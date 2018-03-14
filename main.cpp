@@ -5,28 +5,33 @@
 
 #include "proto.h"
 
+
 int main() {
     ldb a, b, step;
     std::cout << "podaj a, b i długosc przedzialu" << "\n";
     std::cin >> a;
     std::cin >> b;
     std::cin >> step;
-    std:: cout << rct(a, b, step) << "\n" << trp(a, b, step) << "\n" << MC(a, b, step);
+    std::cout << "obliczone metoda prostakatow....... " << rct(a, b, step) << "\n";
+    std::cout << "obliczone metoda trapezow.......... " << trp(a, b, step) << "\n";
+    std::cout << "obliczone metoda Monte Carlo....... " << MC(a, b, step) << "\n";
     return 0;
 }
 
 //oblicznie odległości punktu należącego do funkcji od osi OX
 ldb funVal(ldb x) {
-    //reuturn fabsl(dowolna funkcja);
-    //return fabsl(3 * x * x * x + 3 * x * x + 7 * x + 21);
-    return fabsl(x);
+    //reudturn fabsl(dowolna funkcja);
+    return fabsl(3 * x * x * x + 3 * x * x + 7 * x + 21);
+    //return x;
 }
 
 //obliczanie całki metodą prostokątów
 ldb rct(ldb a, ldb b, ldb step) {
     ldb area = 0;
-    for (ldb i = a; i < b + step / 2.; i += step)
-        area += funVal(i + step / 2.) * step;
+    while (a < b) {
+        area += funVal(a + step / 2.) * step;
+        a += step;
+    }
     return area;
     //return pole pod całką
 }
@@ -35,8 +40,9 @@ ldb rct(ldb a, ldb b, ldb step) {
 ldb trp(ldb a, ldb b, ldb step) {
     ldb area = 0;
     ldb fVal1 = funVal(a);
-    for (ldb i = a; i < b + step; i += step) {
-        ldb fVal2 = funVal(i + step);
+    while (a < b) {
+        a += step;
+        ldb fVal2 = funVal(a);
         area += ((fVal1 + fVal2) * step) / 2.;
         fVal1 = fVal2;
     }
@@ -46,14 +52,15 @@ ldb trp(ldb a, ldb b, ldb step) {
 
 //obliczanie całki metodą Monte Carlo
 ldb MC(ldb a, ldb b, ldb step) {
-    int ptIn = 0;
-    step = (b - a) / step; //by liczba iteracji była porównywalna do wcześniejszych metod
-    srand((unsigned)time(nullptr));
-    ldb ya = 0;
-    ldb yb = ceil(MAX(funVal(a),funVal(b)));
-    for (int i = 0; i < step; i++)
-        ptIn += rngPoint(a, b), rngPoint(ya, yb);
-    return (ptIn / step) * ((b-a) * (yb-ya));
+    ldb fVal = 0;
+    step = (b - a) / step;    //by liczba iteracji była porównywalna do wcześniejszych metod
+    srand(static_cast<unsigned int>(time(nullptr)));
+    int i;
+    for (i = 0; i < step; i++)
+        fVal += funVal(rngPoint(a, b));
+    fVal = (fVal / i) * (b - a);
+
+    return fVal;
     //return pole pod całką
 }
 
