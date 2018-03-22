@@ -1,1 +1,3 @@
-g++ main.cpp proto.h -o integrals
+echo kod skompiluje sie do programu o nazwie integrals "integrals"
+g++ main.cpp -o integrals
+

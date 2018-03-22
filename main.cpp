@@ -14,11 +14,12 @@ int main() {
     std::cin >> a;
     std::cin >> b;
     std::cin >> step;
-
+    step = 1. / step;
     do {
         while (step == 0) {
             std::cout << "podaj dokladonsc rozna od 0\n";
             std::cin >> step;
+            step = 1. / step;
             i++;
             if (i > 3){
                 std::cout << "przekroczono maksymalna liczbe wprowadzenia blednych argumentow\n";
@@ -26,11 +27,11 @@ int main() {
                 return 1;
             }
         }
-        if ((1. /step) < 0.1 || run){
+        if (step < 0.1 || run){
             run = true;
-            std::cout << "obliczone metoda prostakatow....... " << rct(a, b, (1. / step)) << "\n";
-            std::cout << "obliczone metoda trapezow.......... " << trp(a, b, (1. / step)) << "\n";
-            std::cout << "obliczone metoda Monte Carlo....... " << MC(a, b, (1. / step)) << "\n";
+            std::cout << "obliczone metoda prostakatow....... " << rct(a, b, step) << "\n";
+            std::cout << "obliczone metoda trapezow.......... " << trp(a, b, step) << "\n";
+            std::cout << "obliczone metoda Monte Carlo....... " << MC(a, b, step) << "\n";
             system("pause");
             return 0;
         }
@@ -43,6 +44,7 @@ int main() {
             else {
                 std::cout << "podaj nowa dokladnosc";
                 std::cin >> step;
+                step = 1. / step;
             }
         }
         if (i > 3){
@@ -66,23 +68,22 @@ ldb funVal(ldb x) {
 ldb rct(ldb a, ldb b, ldb step) {
     ldb area = 0;
     while (a < b) {
-        area += funVal(a + step / 2.) * step;
+        area += funVal(a + step / 2.);
         a += step;
     }
+    area *= step;
     return area;
     //return pole pod całką
 }
 
 //obliczanie całki metodą trapezów
 ldb trp(ldb a, ldb b, ldb step) {
-    ldb area = 0;
-    ldb fVal1 = funVal(a);
+    ldb area = (a + b) / 2;
     while (a < b) {
         a += step;
-        ldb fVal2 = funVal(a);
-        area += ((fVal1 + fVal2) * step) / 2.;
-        fVal1 = fVal2;
+        area += funVal(a);
     }
+    area *= step;
     return area;
     //return pole pod całką
 }
