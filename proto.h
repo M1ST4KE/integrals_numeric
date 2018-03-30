@@ -4,16 +4,18 @@
 
 #include <cstdio>
 #include <cstdlib>
-#include <cmath>
 #include <ctime>
 #include <iostream>
 #include <ctime>
+#include "functions.cpp"
+
 
 
 typedef long double ldb;
 
-long double funVal(long double);
-long double rct(long double, long double, long double);
-long double trp(long double, long double, long double);
-long double MC(long double, long double, long double);
-long double rngPoint(long double, long double);
+struct intArea;
+
+intArea rct(ldb, ldb, ldb); // NOLINT
+intArea trp(ldb, ldb, ldb); // NOLINT
+intArea MC(ldb, ldb, ldb); // NOLINT
+long double rngPoint(ldb, ldb); // NOLINT

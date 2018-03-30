@@ -3,4 +3,4 @@ project(calki)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(calki main.cpp proto.h)
+add_executable(calki main.cpp proto.h functions.cpp)

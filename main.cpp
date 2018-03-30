@@ -6,6 +6,13 @@
 #include "proto.h"
 
 
+struct intArea {
+    ldb f1;
+    ldb f2;
+    ldb f3;
+    ldb f4;
+};
+
 int main() {
     ldb a, b, step;
     bool run = false;
@@ -29,9 +36,23 @@ int main() {
         }
         if (step < 0.1 || run){
             run = true;
-            std::cout << "obliczone metoda prostakatow....... " << rct(a, b, step) << "\n";
-            std::cout << "obliczone metoda trapezow.......... " << trp(a, b, step) << "\n";
-            std::cout << "obliczone metoda Monte Carlo....... " << MC(a, b, step) << "\n";
+            intArea mc = MC(a, b, step), tr = trp(a, b, step), rc = rct(a, b, step);
+            std::cout << "funkcja f1 = 1 / (5 + 4cos(x))" << "\n";
+            std::cout << "obliczona metoda prostakatow....... " << rc.f1 << "\n";
+            std::cout << "obliczona metoda trapezow.......... " << tr.f1 << "\n";
+            std::cout << "obliczona metoda Monte Carlo....... " << mc.f1 << "\n";
+            std::cout << "funkcja f2 = sqrt(exp(x) - 1)" << "\n";
+            std::cout << "obliczona metoda prostakatow....... " << rc.f2 << "\n";
+            std::cout << "obliczona metoda trapezow.......... " << tr.f2 << "\n";
+            std::cout << "obliczona metoda Monte Carlo....... " << mc.f2 << "\n";
+            std::cout << "funkcja f3 = (4x + 3) / sqr(x^2 + 5x +7)" << "\n";
+            std::cout << "obliczona metoda prostakatow....... " << rc.f3 << "\n";
+            std::cout << "obliczona metoda trapezow.......... " << tr.f3 << "\n";
+            std::cout << "obliczona metoda Monte Carlo....... " << mc.f3 << "\n";
+            std::cout << "funkcja f4 = x^3 / (x^2 - 5x + 6)" << "\n";
+            std::cout << "obliczona metoda prostakatow....... " << rc.f4 << "\n";
+            std::cout << "obliczona metoda trapezow.......... " << tr.f4 << "\n";
+            std::cout << "obliczona metoda Monte Carlo....... " << mc.f4 << "\n";
             system("pause");
             return 0;
         }
@@ -57,46 +78,62 @@ int main() {
 
 }
 
-//oblicznie odległości punktu należącego do funkcji od osi OX
-ldb funVal(ldb x) {
-    //reudturn fabsl(dowolna funkcja);
-    return fabsl(3 * x * x * x + 3 * x * x + 7 * x + 21);
-    //return x;
-}
-
 //obliczanie całki metodą prostokątów
-ldb rct(ldb a, ldb b, ldb step) {
-    ldb area = 0;
+intArea rct(ldb a, ldb b, ldb step) {
+    intArea ar{0, 0, 0, 0};
     while (a < b) {
-        area += funVal(a + step / 2.);
+        ar.f1 += f1(a + step / 2.);
+        ar.f2 += f2(a + step / 2.);
+        ar.f3 += f3(a + step / 2.);
+        ar.f4 += f4(a + step / 2.);
         a += step;
     }
-    area *= step;
-    return area;
+    ar.f1 *= step;
+    ar.f2 *= step;
+    ar.f3 *= step;
+    ar.f4 *= step;
+    return ar;
     //return pole pod całką
 }
 
 //obliczanie całki metodą trapezów
-ldb trp(ldb a, ldb b, ldb step) {
-    ldb area = (a + b) / 2;
+intArea trp(ldb a, ldb b, ldb step) {
+    intArea ar{};
+    ar.f1 = (a + b) / 2;
+    ar.f2 = (a + b) / 2;
+    ar.f3 = (a + b) / 2;
+    ar.f4 = (a + b) / 2;
     while (a < b) {
         a += step;
-        area += funVal(a);
+        ar.f1 += f1(a);
+        ar.f2 += f2(a);
+        ar.f3 += f3(a);
+        ar.f4 += f4(a);
     }
-    area *= step;
-    return area;
+    ar.f1 *= step;
+    ar.f2 *= step;
+    ar.f3 *= step;
+    ar.f4 *= step;
+    return ar;
     //return pole pod całką
 }
 
 //obliczanie całki metodą Monte Carlo
-ldb MC(ldb a, ldb b, ldb step) {
-    ldb fVal = 0;
+intArea MC(ldb a, ldb b, ldb step) {
+    intArea fVal{0, 0, 0, 0};
     step = (b - a) / step;    //by liczba iteracji była porównywalna do wcześniejszych metod
     srand(static_cast<unsigned int>(time(nullptr)));
     int i;
-    for (i = 0; i < step; i++)
-        fVal += funVal(rngPoint(a, b));
-    fVal = (fVal / i) * (b - a);
+    for (i = 0; i < step; i++) {
+        fVal.f1 += f1(rngPoint(a, b));
+        fVal.f2 += f2(rngPoint(a, b));
+        fVal.f3 += f3(rngPoint(a, b));
+        fVal.f4 += f4(rngPoint(a, b));
+    }
+    fVal.f1 = (fVal.f1 / i) * (b - a);
+    fVal.f2 = (fVal.f2 / i) * (b - a);
+    fVal.f3 = (fVal.f3 / i) * (b - a);
+    fVal.f4 = (fVal.f4 / i) * (b - a);
 
     return fVal;
     //return pole pod całką
@@ -104,5 +141,5 @@ ldb MC(ldb a, ldb b, ldb step) {
 
 //losowanie punktu do met Monte Carlo
 ldb rngPoint(ldb a, ldb b) {
-    return a + static_cast<long double>(rand()) / static_cast<long double>((RAND_MAX+1)) * (b-a);
+    return a + static_cast<long double>(rand()) / static_cast<long double>((RAND_MAX+1)) * (b-a); // NOLINT
 }
