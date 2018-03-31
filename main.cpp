@@ -82,10 +82,10 @@ int main() {
 intArea rct(ldb a, ldb b, ldb step) {
     intArea ar{0, 0, 0, 0};
     while (a < b) {
-        ar.f1 += f1(a + step / 2.);
-        ar.f2 += f2(a + step / 2.);
-        ar.f3 += f3(a + step / 2.);
-        ar.f4 += f4(a + step / 2.);
+        ar.f1 += fun1(a + step / 2.);
+        ar.f2 += fun2(a + step / 2.);
+        ar.f3 += fun3(a + step / 2.);
+        ar.f4 += fun4(a + step / 2.);
         a += step;
     }
     ar.f1 *= step;
@@ -105,10 +105,10 @@ intArea trp(ldb a, ldb b, ldb step) {
     ar.f4 = (a + b) / 2;
     while (a < b) {
         a += step;
-        ar.f1 += f1(a);
-        ar.f2 += f2(a);
-        ar.f3 += f3(a);
-        ar.f4 += f4(a);
+        ar.f1 += fun1(a);
+        ar.f2 += fun2(a);
+        ar.f3 += fun3(a);
+        ar.f4 += fun4(a);
     }
     ar.f1 *= step;
     ar.f2 *= step;
@@ -125,10 +125,10 @@ intArea MC(ldb a, ldb b, ldb step) {
     srand(static_cast<unsigned int>(time(nullptr)));
     int i;
     for (i = 0; i < step; i++) {
-        fVal.f1 += f1(rngPoint(a, b));
-        fVal.f2 += f2(rngPoint(a, b));
-        fVal.f3 += f3(rngPoint(a, b));
-        fVal.f4 += f4(rngPoint(a, b));
+        fVal.f1 += fun1(rngPoint(a, b));
+        fVal.f2 += fun2(rngPoint(a, b));
+        fVal.f3 += fun3(rngPoint(a, b));
+        fVal.f4 += fun4(rngPoint(a, b));
     }
     fVal.f1 = (fVal.f1 / i) * (b - a);
     fVal.f2 = (fVal.f2 / i) * (b - a);
